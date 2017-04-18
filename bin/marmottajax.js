@@ -1,5 +1,6 @@
 ;var marmottajax = (function(){
 /**
+ * NOTE! This is a modified version of marmotajax found at https://github.com/dlid/marmottajax
  * main.js
  *
  * Main librairy file
@@ -261,7 +262,8 @@ marmottajax.prototype.setWatcher = function () {
 
 marmottajax.prototype.setXhr = function ()
 {
-    var main = this
+    var main = this,
+        currentXhr;
 
     this.xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
 
@@ -293,6 +295,8 @@ marmottajax.prototype.setXhr = function ()
         error: []
 
     };
+
+    currentXhr = this.xhr;
 
     for (var name in this.xhr.callbacks)
     {
@@ -340,11 +344,11 @@ marmottajax.prototype.setXhr = function ()
 
     this.xhr.onreadystatechange = function () {
 
-        if (this.readyState === 4 && arr_contains(marmottajax.okStatusCodes, this.status))
+        if (currentXhr.readyState === 4 && arr_contains(marmottajax.okStatusCodes, currentXhr.status))
         {
             var result = this.responseText;
 
-            if (this.json)
+            if (currentXhr.json)
             {
                 try
                 {
@@ -359,22 +363,22 @@ marmottajax.prototype.setXhr = function ()
                 }
             }
 
-            this.lastResult = result;
+            currentXhr.lastResult = result;
 
-            this.call("then", result);
+            currentXhr.call("then", result);
             main.success(result)
         }
 
-        else if (this.readyState === 4 && this.status == 404) {
+        else if (currentXhr.readyState === 4 && currentXhr.status == 404) {
 
-            this.call("error", "404");
+            currentXhr.call("error", "404");
             main.error('unknown error')
 
         }
 
         else if (this.readyState === 4) {
 
-            this.call("error", "unknown");
+            currentXhr.call("error", "unknown");
             main.error('unknown error')
 
         }
@@ -383,9 +387,10 @@ marmottajax.prototype.setXhr = function ()
 
     this.xhr.open(this.method, this.url, true);
 
-    if(!this.isform && !this.body)
+    if(!this.isform)
         this.xhr.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
     
+
     for (header in this.headers)
         if (this.headers.hasOwnProperty(header))
             this.xhr.setRequestHeader(header, this.headers[header]);

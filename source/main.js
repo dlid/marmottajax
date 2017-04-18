@@ -1,5 +1,6 @@
 
 /**
+ * NOTE! This is a modified version of marmotajax found at https://github.com/dlid/marmottajax
  * main.js
  *
  * Main librairy file

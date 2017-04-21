@@ -4,10 +4,9 @@
  * Set XMLHttpRequest
  */
 
-marmottajax.prototype.setXhr = function ()
+marmottajax.prototype.setXhr = function (main)
 {
-    var main = this,
-        currentXhr;
+    var currentXhr;
 
     this.xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
 
@@ -131,9 +130,9 @@ marmottajax.prototype.setXhr = function ()
 
     this.xhr.open(this.method, this.url, true);
 
-    if(!this.isform)
+    if(!this.isform && !main.headers && !main.headers['Content-Type'])
         this.xhr.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
-    
+     
 
     for (header in this.headers)
         if (this.headers.hasOwnProperty(header))

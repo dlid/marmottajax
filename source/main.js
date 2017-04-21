@@ -3,7 +3,7 @@
  * NOTE! This is a modified version of marmotajax found at https://github.com/dlid/marmottajax
  * main.js
  *
- * Main librairy file
+ * Main librairy file   
  */
 
 var arr_contains = function(obj, to_find)
@@ -127,6 +127,6 @@ marmottajax = function(common_params)    // MAIN
     }
     
 
-	t.setXhr();
-	t.setWatcher();
+	t.setXhr(t);
+	t.setWatcher(t);
 };

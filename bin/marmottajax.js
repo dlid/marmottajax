@@ -3,7 +3,7 @@
  * NOTE! This is a modified version of marmotajax found at https://github.com/dlid/marmottajax
  * main.js
  *
- * Main librairy file
+ * Main librairy file   
  */
 
 var arr_contains = function(obj, to_find)
@@ -127,8 +127,8 @@ marmottajax = function(common_params)    // MAIN
     }
     
 
-	t.setXhr();
-	t.setWatcher();
+	t.setXhr(t);
+	t.setWatcher(t);
 };
 
 /**
@@ -260,10 +260,9 @@ marmottajax.prototype.setWatcher = function () {
  * Set XMLHttpRequest
  */
 
-marmottajax.prototype.setXhr = function ()
+marmottajax.prototype.setXhr = function (main)
 {
-    var main = this,
-        currentXhr;
+    var currentXhr;
 
     this.xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
 
@@ -387,9 +386,9 @@ marmottajax.prototype.setXhr = function ()
 
     this.xhr.open(this.method, this.url, true);
 
-    if(!this.isform)
+    if(!this.isform && !main.headers && !main.headers['Content-Type'])
         this.xhr.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
-    
+     
 
     for (header in this.headers)
         if (this.headers.hasOwnProperty(header))
